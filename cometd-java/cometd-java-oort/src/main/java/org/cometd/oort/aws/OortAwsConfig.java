@@ -1,18 +1,3 @@
-/*
- * Copyright (c) 2008-2014 the original author or authors.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
 package org.cometd.oort.aws;
 
 import java.net.InetAddress;
@@ -23,8 +8,7 @@ import java.util.List;
 import java.util.Properties;
 import java.util.StringTokenizer;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.log4j.Logger;
 import org.cometd.oort.Oort;
 import org.cometd.oort.OortConfig;
 import org.cometd.oort.OortConfigException;
@@ -39,14 +23,13 @@ public class OortAwsConfig implements OortConfig {
 	private static final String OORT_AWS_INSTANCES_REFRESH_INTERVAL_PARAM = "oort.aws.instancesRefreshInterval"; //millis
 	private static final String OORT_AWS_CONNECT_TIMEOUT_PARAM = "oort.aws.connectTimeout"; //millis
 	private static final String OORT_AWS_RMI_PEER_ADDRESS_PARAM = "oort.aws.rmiPeerAddress";
-	private static final String OORT_AWS_RMI_PEER_REMOTE_PORT_PARAM = "oort.aws.rmiRemotePeerPort";
 	private static final String OORT_AWS_RMI_PEER_PORT_PARAM = "oort.aws.rmiPeerPort";
 
 	private static final int OORT_AWS_INSTANCES_REFRESH_INTERVAL_DEFAULT = 5000; //millis
 	private static final int OORT_AWS_RMI_PEER_PORT_DEFAULT = 40000;
 	private static final int OORT_AWS_CONNECT_TIMEOUT_DEFAULT = 2000;
 
-	private final Logger _log = LoggerFactory.getLogger(OortAwsConfig.class);
+	private final Logger _log = Logger.getLogger(OortAwsConfig.class);
 
 	private OortAwsConfigurer configurer;
 
@@ -68,14 +51,6 @@ public class OortAwsConfig implements OortConfig {
 			rmiPeerPort = Integer.parseInt(rmiPeerPortString);
 		} catch (Exception e) {
 			_log.info("No peerPort set. Set to the default of: " + rmiPeerPort);
-		}
-		
-		String rmiRemotePeerPortString = properties.getProperty(OORT_AWS_RMI_PEER_REMOTE_PORT_PARAM, String.valueOf(rmiPeerPort));
-		int rmiRemotePeerPort = OORT_AWS_RMI_PEER_PORT_DEFAULT;
-		try {
-			rmiRemotePeerPort = Integer.parseInt(rmiRemotePeerPortString);
-		} catch (Exception e) {
-			_log.info("No peerPort set. Set to the default of: " + rmiRemotePeerPort);
 		}
 
 		String accessKey = properties.getProperty(OORT_AWS_ACCESS_KEY_PARAM);
@@ -117,7 +92,7 @@ public class OortAwsConfig implements OortConfig {
 		String connectTimeoutString = properties.getProperty(OORT_AWS_CONNECT_TIMEOUT_PARAM, "" + OORT_AWS_CONNECT_TIMEOUT_DEFAULT);
 		long connectTimeout = Long.parseLong(connectTimeoutString);
 
-		configurer = new OortAwsConfigurer(rmiPeerAddress, rmiPeerPort, rmiRemotePeerPort, accessKey, secretKey, region, refreshInterval, filtersMap, connectTimeout, oort);
+		configurer = new OortAwsConfigurer(rmiPeerAddress, rmiPeerPort, accessKey, secretKey, region, refreshInterval, filtersMap, connectTimeout, oort);
 	}
 
 	@Override

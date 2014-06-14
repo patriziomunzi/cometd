@@ -54,7 +54,7 @@ public class OortAwsConfigurer extends AbstractLifeCycle
 	private final OortUrlRMIReceiverIF cometUrlReceiver;
 	private volatile boolean active;
 
-	public OortAwsConfigurer(String rmiPeerAddress, int rmiPeerPort, int rmiRemotePeerPort, String accessKey, String secretKey, String region, int instancesRefreshInterval, HashMap<String, List<String>> filtersMap, long connectTimeout, Oort oort) throws OortConfigException
+	public OortAwsConfigurer(String rmiPeerAddress, int rmiPeerPort, String accessKey, String secretKey, String region, int instancesRefreshInterval, HashMap<String, List<String>> filtersMap, long connectTimeout, Oort oort) throws OortConfigException
 	{
 		this.logger = LoggerFactory.getLogger(getClass() + "." + Oort.replacePunctuation(oort.getURL(), '_'));
 
@@ -66,7 +66,7 @@ public class OortAwsConfigurer extends AbstractLifeCycle
 		
 		this.oort = oort;
 
-		refreshAWSInstancesThread = new RefreshAWSInstancesThread(region, accessKey, secretKey, instancesRefreshInterval, filtersMap, rmiPeerAddress, rmiRemotePeerPort);
+		refreshAWSInstancesThread = new RefreshAWSInstancesThread(region, accessKey, secretKey, instancesRefreshInterval, filtersMap, rmiPeerAddress, rmiPeerPort);
 		try {
 			cometUrlReceiver = new OortUrlRMIReceiver(rmiPeerAddress, rmiPeerPort, connectTimeout, oort);
 		} catch (Exception e) {
@@ -277,7 +277,7 @@ public class OortAwsConfigurer extends AbstractLifeCycle
 						.append(":")
 						.append(rmiPeerPort)
 						.append("/")
-						.append(OortUrlRMIReceiver.class.getName())
+						.append(OortUrlRMIReceiverIF.class.getName())
 						.toString();
 
 						try {
